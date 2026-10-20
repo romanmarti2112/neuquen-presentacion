@@ -1,0 +1,125 @@
+/* ===== Paleta Cuenca Neuquina ===== */
+:root{
+  --verde-950:#06180f;
+  --verde-900:#0b2a1e;
+  --verde-800:#12402e;
+  --verde-700:#1b5e43;
+  --verde-600:#2e7d57;
+  --verde-400:#6fae7f;
+  --verde-neon:#5dffa0;
+  --verde-200:#c9e2cf;
+  --tierra:#e0a53f;
+  --blanco:#f7faf6;
+  --dock:250px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:"Segoe UI",Arial,sans-serif;background:var(--verde-950);color:var(--blanco);overflow:hidden}
+
+/* ===== Fondo animado: estratos de la cuenca ===== */
+.fondo{position:fixed;inset:0;overflow:hidden;
+  background:radial-gradient(ellipse at 30% 10%,var(--verde-700) 0,var(--verde-900) 45%,var(--verde-950) 100%)}
+.rejilla{position:absolute;inset:0;
+  background-image:radial-gradient(rgba(93,255,160,.18) 1px,transparent 1.5px);background-size:34px 34px;
+  mask-image:linear-gradient(to bottom,#000,transparent 75%);-webkit-mask-image:linear-gradient(to bottom,#000,transparent 75%)}
+.orbe{position:absolute;border-radius:50%;filter:blur(70px);opacity:.55;transition:transform .4s ease-out}
+.o1{width:42vw;height:42vw;left:10vw;top:-12vw;background:var(--verde-600)}
+.o2{width:30vw;height:30vw;right:-6vw;top:25vh;background:var(--verde-neon);opacity:.22}
+.o3{width:26vw;height:26vw;left:35vw;bottom:-10vw;background:var(--tierra);opacity:.25}
+.estrato{position:absolute;left:0;bottom:0;width:200%;height:34%;animation:deriva 40s linear infinite}
+.e1{fill:rgba(46,125,87,.45);height:42%;animation-duration:55s}
+.e2{fill:rgba(27,94,67,.7);height:32%;animation-duration:38s;animation-direction:reverse}
+.e3{fill:rgba(11,42,30,.92);height:22%;animation-duration:26s}
+@keyframes deriva{to{transform:translateX(-50%)}}
+
+/* ===== Escenario ===== */
+.escenario{position:fixed;inset:0 0 0 var(--dock);overflow:hidden}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 7vw 14vh;opacity:0;visibility:hidden;transform:scale(.97) translateX(60px);filter:blur(8px);
+  transition:opacity .7s ease,transform .7s ease,visibility .7s,filter .7s}
+.slide.activa{opacity:1;visibility:visible;transform:none;filter:none}
+.slide.saliendo{transform:scale(.97) translateX(-60px)}
+/* número fantasma */
+.slide::before{content:attr(data-n);position:absolute;right:3vw;top:50%;transform:translateY(-50%);
+  font-size:min(38vw,70vh);font-weight:900;line-height:1;color:transparent;
+  -webkit-text-stroke:2px rgba(93,255,160,.22);z-index:-1;pointer-events:none}
+/* entrada escalonada */
+.slide.activa>*{animation:sube .8s cubic-bezier(.2,.8,.2,1) both}
+.slide.activa>*:nth-child(2){animation-delay:.12s}
+.slide.activa>*:nth-child(3){animation-delay:.24s}
+.slide.activa>*:nth-child(4){animation-delay:.36s}
+@keyframes sube{from{opacity:0;transform:translateY(34px)}}
+
+.etiqueta{align-self:flex-start;font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;font-weight:700;
+  color:var(--verde-neon);background:rgba(93,255,160,.1);border:1px solid rgba(93,255,160,.4);
+  padding:.45rem 1rem;border-radius:99px;margin-bottom:1.4rem;backdrop-filter:blur(6px)}
+h1{font-size:clamp(2.6rem,7vw,6rem);line-height:1;margin-bottom:1rem;font-weight:900;letter-spacing:-.02em;
+  background:linear-gradient(100deg,#fff 30%,var(--verde-neon) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{font-size:clamp(1.9rem,4.4vw,3.4rem);margin-bottom:1.4rem;font-weight:800;letter-spacing:-.01em}
+.sub{font-size:clamp(1rem,1.8vw,1.4rem);color:var(--verde-200);max-width:42ch}
+.linea{width:120px;height:6px;border-radius:9px;background:linear-gradient(90deg,var(--tierra),var(--verde-neon));margin:1.2rem 0;
+  box-shadow:0 0 18px rgba(93,255,160,.6)}
+
+.vacio{border:2px dashed rgba(93,255,160,.4);border-radius:18px;padding:2.4rem;max-width:60ch;
+  color:var(--verde-200);background:rgba(255,255,255,.05);backdrop-filter:blur(8px)}
+
+/* Integrantes */
+.integrantes{list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1.1rem;max-width:1000px}
+.integrantes li{display:flex;align-items:center;gap:.9rem;background:rgba(255,255,255,.07);backdrop-filter:blur(10px);
+  border:1px solid rgba(93,255,160,.25);border-radius:16px;padding:1rem;font-size:1.05rem;transition:.3s}
+.integrantes li:hover{transform:translateY(-6px);border-color:var(--verde-neon);box-shadow:0 10px 30px rgba(93,255,160,.18)}
+.integrantes em{font-style:normal;font-weight:800;width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--verde-neon),var(--verde-600));color:var(--verde-950)}
+
+/* Índice de temas */
+.temas{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1.1rem;max-width:1050px}
+.temas a{position:relative;overflow:hidden;display:block;text-decoration:none;color:var(--blanco);
+  background:rgba(255,255,255,.07);backdrop-filter:blur(10px);border:1px solid rgba(93,255,160,.25);
+  border-radius:18px;padding:1.4rem;transition:.3s}
+.temas a:hover{transform:translateY(-8px) rotate(-1deg);border-color:var(--verde-neon);box-shadow:0 14px 34px rgba(93,255,160,.22)}
+.temas b{display:block;font-size:2.8rem;font-weight:900;color:transparent;-webkit-text-stroke:1.5px var(--tierra)}
+
+/* ===== Panel de control (dock lateral) ===== */
+.panel{position:fixed;left:0;top:0;bottom:0;width:var(--dock);z-index:10;display:flex;flex-direction:column;gap:.9rem;
+  padding:1.3rem 1rem;background:rgba(6,24,15,.72);backdrop-filter:blur(18px);border-right:1px solid rgba(93,255,160,.25)}
+.marca b{display:block;font-size:1.5rem;font-weight:900;letter-spacing:.14em;color:var(--verde-neon)}
+.marca small{color:var(--verde-200);letter-spacing:.2em;text-transform:uppercase;font-size:.65rem}
+.panel h3{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;color:var(--tierra);margin-top:.4rem}
+.panel nav{display:flex;flex-direction:column;gap:.35rem;flex:1;overflow-y:auto}
+.panel nav a{display:flex;align-items:center;gap:.8rem;color:var(--verde-200);text-decoration:none;padding:.6rem .7rem;border-radius:12px;
+  border:1px solid transparent;transition:.25s}
+.panel nav a i{font-style:normal;font-weight:800;font-size:.85rem;color:var(--tierra);width:1.6rem}
+.panel nav a:hover{background:rgba(93,255,160,.1);border-color:rgba(93,255,160,.3);transform:translateX(4px)}
+.panel nav a.actual{background:linear-gradient(90deg,var(--verde-neon),var(--verde-600));color:var(--verde-950);font-weight:700}
+.panel nav a.actual i{color:var(--verde-950)}
+.mandos{display:flex;justify-content:space-between}
+.mandos button{width:56px;height:46px;border-radius:14px;border:1px solid rgba(93,255,160,.4);cursor:pointer;font-size:1.1rem;
+  background:rgba(93,255,160,.1);color:var(--blanco);transition:.2s}
+.mandos button:hover{background:var(--verde-neon);color:var(--verde-950);box-shadow:0 0 18px rgba(93,255,160,.6)}
+.puntos{display:flex;flex-wrap:wrap;gap:.4rem}
+.puntos span{width:26px;height:6px;border-radius:9px;background:rgba(93,255,160,.25);cursor:pointer;transition:.3s}
+.puntos span.activo{background:var(--tierra);width:40px}
+.contador{display:flex;align-items:baseline;gap:.4rem}
+.contador b{font-size:2.2rem;font-weight:900;color:var(--verde-neon)}
+.contador span{color:var(--verde-200)}
+.remoto{display:flex;gap:.7rem;align-items:center;padding:.7rem;border-radius:12px;background:rgba(255,255,255,.06);font-size:.8rem}
+.remoto small{display:block;color:var(--verde-400);word-break:break-all;font-size:.65rem;margin-top:2px}
+.luz{width:12px;height:12px;border-radius:50%;background:#7a8a80;flex:none}
+.luz.on{background:var(--verde-neon);box-shadow:0 0 12px var(--verde-neon);animation:pulso 1.6s infinite}
+@keyframes pulso{50%{opacity:.4}}
+.barra{position:fixed;left:var(--dock);right:0;top:0;height:5px;width:0;background:linear-gradient(90deg,var(--tierra),var(--verde-neon));z-index:11}
+/* aviso al recibir un comando */
+.toast{position:fixed;right:2vw;top:2vh;z-index:20;padding:.7rem 1.2rem;border-radius:99px;font-weight:700;
+  background:var(--verde-neon);color:var(--verde-950);opacity:0;transform:translateY(-12px);transition:.3s;pointer-events:none}
+.toast.ver{opacity:1;transform:none}
+
+@media(max-width:800px){
+  :root{--dock:0px}
+  .panel{top:auto;width:100%;height:64px;flex-direction:row;align-items:center;padding:0 .6rem;border-right:0;border-top:1px solid rgba(93,255,160,.3)}
+  .panel .marca,.panel h3,.puntos,.contador,.remoto{display:none}
+  .panel nav{flex-direction:row}
+  .panel nav a span{display:none}
+  .escenario{bottom:64px}
+  .barra{bottom:64px;top:auto}
+  .slide{padding:5vh 6vw}
+}

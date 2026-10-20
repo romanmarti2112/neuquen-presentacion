@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="theme-color" content="#06180f">
+<title>Control - Cuenca Neuquina</title>
+<link rel="stylesheet" href="css/control.css">
+</head>
+<body>
+<header>
+  <div><b>NEUQUÉN</b><small>Control remoto</small></div>
+  <div class="estado"><span class="luz" id="luz"></span><span id="estado-txt">Conectando...</span></div>
+</header>
+
+<section class="ahora">
+  <small>Mostrando</small>
+  <strong id="ahora-pag">—</strong>
+  <span id="ahora-sl">Diapositiva — / —</span>
+</section>
+
+<section class="voz">
+  <button id="btn-mic" class="mic" aria-label="Activar voz"><span>🎙</span></button>
+  <p id="voz-estado">Tocá el micrófono para usar la voz</p>
+  <p id="voz-oyo" class="oyo"></p>
+  <details><summary>Comandos de voz</summary>
+    <p>«siguiente» · «anterior» · «pausa» · «continuar» · «inicio» · «tema 3» · «ir al tema dos» · «primera» · «última»</p>
+  </details>
+</section>
+
+<section class="mando">
+  <button data-cmd="prev" class="grande">◀<small>Anterior</small></button>
+  <button data-cmd="toggle" class="grande central" id="btn-toggle">⏸<small>Pausa</small></button>
+  <button data-cmd="next" class="grande">▶<small>Siguiente</small></button>
+</section>
+
+<section>
+  <h2>Ir a un tema</h2>
+  <div class="temas" id="temas"></div>
+</section>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/control.js"></script>
+</body>
+</html>
