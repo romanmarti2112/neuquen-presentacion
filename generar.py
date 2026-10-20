@@ -42,7 +42,7 @@ def pagina(archivo, titulo, slides):
         '<!DOCTYPE html>\n<html lang="es">\n<head>\n<meta charset="UTF-8">\n'
         '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
         '<title>%s</title>\n<link rel="stylesheet" href="css/estilos.css">\n</head>\n<body>\n'
-        '%s\n%s\n<main class="escenario">\n%s\n</main>\n<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>\n'
+        '%s\n%s\n<main class="escenario">\n%s\n</main>\n'
         '<script src="js/config.js"></script>\n<script src="js/presentacion.js"></script>\n</body>\n</html>\n'
         % (titulo, FONDO, panel(archivo), slides)
     )

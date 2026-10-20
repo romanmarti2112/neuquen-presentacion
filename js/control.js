@@ -5,11 +5,21 @@
   var $ = function (id) { return document.getElementById(id); };
 
   // ---- Enviar comandos ----
-  var conn = null;
+  var NTFY = 'https://ntfy.sh/';
+  var CANAL_CMD = NTFY + window.SALA + '-cmd', CANAL_ESTADO = NTFY + window.SALA + '-estado';
+  var esperaT = null;
+
+  function estadoConexion(ok, txt) {
+    $('luz').className = 'luz ' + (ok ? 'on' : '');
+    $('estado-txt').textContent = txt;
+  }
   function enviar(cmd) {
     if (navigator.vibrate) navigator.vibrate(25);
-    if (conn && conn.open) conn.send(cmd);
-    else $('estado-txt').textContent = 'Esperando pantalla';
+    fetch(CANAL_CMD, { method: 'POST', body: JSON.stringify(cmd) })
+      .catch(function () { estadoConexion(false, 'Sin internet'); });
+    // La pantalla responde con su estado; si no lo hace, avisamos.
+    clearTimeout(esperaT);
+    esperaT = setTimeout(function () { estadoConexion(false, 'La pantalla no responde'); }, 6000);
   }
 
   // ---- Botones ----
@@ -39,23 +49,23 @@
     dibujarTemas();
   }
 
-  function estadoConexion(ok, txt) {
-    $('luz').className = 'luz ' + (ok ? 'on' : '');
-    $('estado-txt').textContent = txt;
-  }
-  // Conexión directa (WebRTC) con la pantalla; se reintenta sola cuando la pantalla cambia de página.
-  var peer = new Peer();
-  function conectar() {
-    if (conn && conn.open) return;
-    if (peer.destroyed || peer.disconnected) { try { peer.reconnect(); } catch (x) {} }
-    conn = peer.connect(window.SALA + '-pantalla', { reliable: true });
-    conn.on('open', function () { estadoConexion(true, 'Pantalla conectada'); });
-    conn.on('data', function (d) { if (d.type === 'state') { estado = d; mostrarEstado(); } });
-    conn.on('close', function () { estadoConexion(false, 'Esperando pantalla'); });
-  }
-  peer.on('open', conectar);
-  peer.on('error', function () { estadoConexion(false, 'Esperando pantalla'); });
-  setInterval(function () { if (peer.open && !(conn && conn.open)) conectar(); }, 2000);
+  var visto = {};
+  var es = new EventSource(CANAL_ESTADO + '/sse');
+  es.onmessage = function (e) {
+    try {
+      var d = JSON.parse(e.data);
+      if (d.event !== 'message' || visto[d.id]) return;
+      visto[d.id] = 1;
+      var st = JSON.parse(d.message);
+      if (Date.now() - st.t > 60000) return; // estado viejo
+      clearTimeout(esperaT);
+      estado = st;
+      estadoConexion(true, 'Pantalla conectada');
+      mostrarEstado();
+    } catch (x) {}
+  };
+  estadoConexion(false, 'Buscando pantalla...');
+  enviar({ action: 'ping' });
 
   fetch('paginas.json').then(function (r) { return r.json(); }).then(function (d) { paginas = d; mostrarEstado(); });
 

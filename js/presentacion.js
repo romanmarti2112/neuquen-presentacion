@@ -28,7 +28,6 @@
     actual = i;
     document.getElementById('cont-n').textContent = dos(i + 1);
     reiniciarBarra();
-    enviarEstado();
   }
   function ir(i) { mostrar((i + slides.length) % slides.length); reiniciar(); }
   function siguiente() { ir(actual + 1); }
@@ -36,11 +35,11 @@
 
   function reiniciarBarra() {
     barra.style.transition = 'none';
-    barra.style.width = '0';
+    barra.style.transform = 'scaleX(0)';
     if (!reproduciendo) return;
     void barra.offsetWidth;
-    barra.style.transition = 'width ' + TIEMPO + 'ms linear';
-    barra.style.width = '100%';
+    barra.style.transition = 'transform ' + TIEMPO + 'ms linear';
+    barra.style.transform = 'scaleX(1)';
   }
   function reiniciar() {
     clearInterval(timer);
@@ -52,7 +51,6 @@
     btnPlay.textContent = valor ? '⏸' : '▶';
     reiniciar();
     reiniciarBarra();
-    enviarEstado();
   }
   function alternar() { fijarReproduccion(!reproduciendo); }
 
@@ -65,51 +63,50 @@
     toastT = setTimeout(function () { toastEl.classList.remove('ver'); }, 1600);
   }
 
-  // ---- Conexión con el celular (servidor Node) ----
-  var conexiones = [];
-  function enviarEstado() {
-    var st = { type: 'state', page: pagina, slide: actual + 1, total: slides.length, playing: reproduciendo };
-    conexiones.forEach(function (c) { if (c.open) c.send(st); });
+  // ---- Conexión con el celular ----
+  // Los comandos viajan por ntfy.sh (servicio público, HTTPS): funciona entre redes distintas sin servidor propio.
+  var NTFY = 'https://ntfy.sh/';
+  var CANAL_CMD = NTFY + window.SALA + '-cmd', CANAL_ESTADO = NTFY + window.SALA + '-estado';
+
+  // El estado se publica solo al recibir un comando (no en cada avance automático) para no pasar el límite del servicio.
+  function publicarEstado() {
+    fetch(CANAL_ESTADO, { method: 'POST', body: JSON.stringify({ page: pagina, slide: actual + 1, total: slides.length,
+      playing: reproduciendo, t: Date.now() }) }).catch(function () {});
   }
   function comando(c) {
     switch (c.action) {
+      case 'ping': break;
       case 'next': siguiente(); aviso('Siguiente ▶'); break;
       case 'prev': anterior(); aviso('◀ Anterior'); break;
       case 'play': fijarReproduccion(true); aviso('Reproduciendo'); break;
       case 'pause': fijarReproduccion(false); aviso('Pausa'); break;
       case 'toggle': alternar(); aviso(reproduciendo ? 'Reproduciendo' : 'Pausa'); break;
-      case 'slide': ir(parseInt(c.index, 10) || 0); break;
+      case 'slide': ir(c.index >= slides.length ? slides.length - 1 : (parseInt(c.index, 10) || 0)); break;
       case 'page':
         if (c.file === pagina) { ir(0); aviso('Inicio del tema'); }
-        else { aviso('Abriendo...'); location.href = c.file; }
+        else { aviso('Abriendo...'); location.href = c.file; return; }
         break;
     }
-  }
-  // La pantalla se registra en el broker público de PeerJS con un id fijo; el celular se conecta directo (WebRTC).
-  function indicador() {
-    var n = conexiones.filter(function (c) { return c.open; }).length;
-    document.getElementById('luz').classList.toggle('on', n > 0);
-    document.getElementById('remoto-txt').textContent = n > 0 ? 'Celular conectado' : 'Esperando celular';
+    document.getElementById('luz').classList.add('on');
+    document.getElementById('remoto-txt').textContent = 'Celular conectado';
+    publicarEstado();
   }
   document.getElementById('remoto-url').textContent =
     new URL('control.html', location.href).href.replace(/^https?:\/\//, '');
 
-  function registrar() {
-    if (!window.Peer || !window.SALA) return;
-    var peer = new Peer(window.SALA + '-pantalla');
-    peer.on('connection', function (c) {
-      conexiones.push(c);
-      c.on('open', function () { indicador(); c.send({ type: 'state', page: pagina, slide: actual + 1, total: slides.length, playing: reproduciendo }); });
-      c.on('data', function (d) { comando(d); });
-      c.on('close', function () { conexiones = conexiones.filter(function (x) { return x !== c; }); indicador(); });
-    });
-    // Al cambiar de página el id tarda un instante en liberarse: se reintenta.
-    peer.on('error', function (e) {
-      if (e.type === 'unavailable-id') { peer.destroy(); setTimeout(registrar, 1500); }
-    });
-    peer.on('disconnected', function () { peer.reconnect(); });
+  if (window.EventSource && window.SALA) {
+    var visto = {};
+    var es = new EventSource(CANAL_CMD + '/sse');
+    es.onmessage = function (e) {
+      try {
+        var d = JSON.parse(e.data);
+        if (d.event !== 'message' || visto[d.id]) return;
+        visto[d.id] = 1;
+        comando(JSON.parse(d.message));
+      } catch (x) {}
+    };
+    publicarEstado();
   }
-  registrar();
 
   // ---- Controles locales ----
   document.getElementById('btn-sig').addEventListener('click', siguiente);
@@ -120,16 +117,6 @@
     else if (e.key === 'ArrowLeft') anterior();
     else if (e.key === ' ') { e.preventDefault(); alternar(); }
   });
-  // Paralaje suave del fondo
-  var orbes = document.querySelectorAll('.orbe');
-  document.addEventListener('mousemove', function (e) {
-    var x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
-    orbes.forEach(function (o, i) {
-      var f = (i + 1) * 30;
-      o.style.transform = 'translate(' + (-x * f) + 'px,' + (-y * f) + 'px)';
-    });
-  });
-
   btnPlay.textContent = reproduciendo ? '⏸' : '▶';
   mostrar(0);
   reiniciar();
