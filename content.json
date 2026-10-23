@@ -1,0 +1,145 @@
+{
+ "version": 1,
+ "portada": {
+  "titulo": "Cuenca\nNeuquina",
+  "subtitulo": "[Subtítulo / materia / institución]"
+ },
+ "integrantes": [
+  "Navarro Kevin",
+  "Vallejos Axel",
+  "Suarez Nicolas",
+  "Vargas Alexis",
+  "Magallan Luciano"
+ ],
+ "temas": [
+  {
+   "nombre": "Tema 1",
+   "titulo": "[Título del tema 1]",
+   "descripcion": "[Descripción breve]",
+   "diapositivas": [
+    {
+     "titulo": "[Subtítulo A]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    },
+    {
+     "titulo": "[Subtítulo B]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    },
+    {
+     "titulo": "[Subtítulo C]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    }
+   ]
+  },
+  {
+   "nombre": "Tema 2",
+   "titulo": "[Título del tema 2]",
+   "descripcion": "[Descripción breve]",
+   "diapositivas": [
+    {
+     "titulo": "[Subtítulo A]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    },
+    {
+     "titulo": "[Subtítulo B]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    },
+    {
+     "titulo": "[Subtítulo C]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    }
+   ]
+  },
+  {
+   "nombre": "Tema 3",
+   "titulo": "[Título del tema 3]",
+   "descripcion": "[Descripción breve]",
+   "diapositivas": [
+    {
+     "titulo": "[Subtítulo A]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    },
+    {
+     "titulo": "[Subtítulo B]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    },
+    {
+     "titulo": "[Subtítulo C]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    }
+   ]
+  },
+  {
+   "nombre": "Tema 4",
+   "titulo": "[Título del tema 4]",
+   "descripcion": "[Descripción breve]",
+   "diapositivas": [
+    {
+     "titulo": "[Subtítulo A]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    },
+    {
+     "titulo": "[Subtítulo B]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    },
+    {
+     "titulo": "[Subtítulo C]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    }
+   ]
+  },
+  {
+   "nombre": "Tema 5",
+   "titulo": "[Título del tema 5]",
+   "descripcion": "[Descripción breve]",
+   "diapositivas": [
+    {
+     "titulo": "[Subtítulo A]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    },
+    {
+     "titulo": "[Subtítulo B]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    },
+    {
+     "titulo": "[Subtítulo C]",
+     "texto": "",
+     "puntos": [],
+     "imagen": ""
+    }
+   ]
+  }
+ ],
+ "cierre": {
+  "titulo": "Gracias",
+  "texto": "[Mensaje final / preguntas]"
+ }
+}

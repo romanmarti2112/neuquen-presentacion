@@ -125,3 +125,22 @@ h2{font-size:clamp(1.9rem,4.4vw,3.4rem);margin-bottom:1.4rem;font-weight:800;let
 }
 
 @media(prefers-reduced-motion:reduce){.estrato{animation:none}.slide.activa>*{animation:none}}
+
+/* ===== Contenido editable: texto, listas e imagen ===== */
+.cuerpo{display:grid;gap:2rem;align-items:center;max-width:1100px}
+.cuerpo.con-imagen{grid-template-columns:1.1fr 1fr}
+.texto .sub{max-width:60ch;margin-bottom:.8rem;font-size:clamp(1rem,1.7vw,1.3rem);color:var(--blanco)}
+.lista{list-style:none;display:grid;gap:.7rem;font-size:clamp(1rem,1.7vw,1.3rem);max-width:60ch}
+.lista li{position:relative;padding-left:1.8rem}
+.lista li::before{content:"";position:absolute;left:0;top:.5em;width:.7rem;height:.7rem;border-radius:50%;
+  background:var(--verde-neon);box-shadow:0 0 10px rgba(93,255,160,.7)}
+.imagen{border-radius:18px;overflow:hidden;border:1px solid rgba(93,255,160,.35);box-shadow:0 14px 40px rgba(0,0,0,.4)}
+.imagen img{display:block;width:100%;max-height:52vh;object-fit:cover}
+.editar{margin-top:.2rem;text-align:center;font-size:.8rem;color:var(--verde-200);text-decoration:none;
+  padding:.5rem;border-radius:10px;border:1px dashed rgba(93,255,160,.35)}
+.editar:hover{background:rgba(93,255,160,.12);color:var(--blanco)}
+
+/* Vista previa dentro del editor: sin panel */
+body.preview{--dock:0px}
+body.preview .panel{display:none}
+@media(max-width:800px){.cuerpo.con-imagen{grid-template-columns:1fr}.editar{display:none}}

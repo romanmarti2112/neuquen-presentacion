@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tema - Cuenca Neuquina</title>
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body data-vista="tema">
+<div class="fondo"><div class="orbe o1"></div><div class="orbe o2"></div><div class="orbe o3"></div><div class="rejilla"></div>
+<svg class="estrato e1" viewBox="0 0 2400 200" preserveAspectRatio="none"><path d="M0,60 C150,20 350,100 600,60 S1050,100 1200,60 C1350,20 1550,100 1800,60 S2250,100 2400,60 L2400,200 L0,200Z"/></svg>
+<svg class="estrato e2" viewBox="0 0 2400 200" preserveAspectRatio="none"><path d="M0,60 C150,20 350,100 600,60 S1050,100 1200,60 C1350,20 1550,100 1800,60 S2250,100 2400,60 L2400,200 L0,200Z"/></svg>
+<svg class="estrato e3" viewBox="0 0 2400 200" preserveAspectRatio="none"><path d="M0,60 C150,20 350,100 600,60 S1050,100 1200,60 C1350,20 1550,100 1800,60 S2250,100 2400,60 L2400,200 L0,200Z"/></svg></div>
+<div class="barra"></div>
+<aside class="panel">
+  <div class="marca"><b>NEUQUÉN</b><small>Cuenca Neuquina</small></div>
+  <h3>Panel de control</h3>
+  <nav id="nav"></nav>
+  <div class="mandos"><button id="btn-ant" title="Anterior (←)">◀</button><button id="btn-play" title="Pausa / Play (espacio)">⏸</button><button id="btn-sig" title="Siguiente (→)">▶</button></div>
+  <div class="puntos"></div>
+  <div class="contador"><b id="cont-n">01</b><span id="cont-t">/ 01</span></div>
+  <div class="remoto"><span class="luz" id="luz"></span><div><strong id="remoto-txt">Esperando celular</strong><small id="remoto-url">...</small></div></div>
+  <a class="editar" href="editar.html">✎ Editar contenido</a>
+</aside>
+<main class="escenario" id="escenario"></main>
+<script src="js/config.js"></script>
+<script src="js/contenido.js"></script>
+<script src="js/presentacion.js"></script>
+</body>
+</html>

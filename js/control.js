@@ -60,6 +60,7 @@
       if (Date.now() - st.t > 60000) return; // estado viejo
       clearTimeout(esperaT);
       estado = st;
+      if (Array.isArray(st.paginas) && st.paginas.length) paginas = st.paginas;
       estadoConexion(true, 'Pantalla conectada');
       mostrarEstado();
     } catch (x) {}
@@ -67,7 +68,13 @@
   estadoConexion(false, 'Buscando pantalla...');
   enviar({ action: 'ping' });
 
-  fetch('paginas.json').then(function (r) { return r.json(); }).then(function (d) { paginas = d; mostrarEstado(); });
+  // Lista inicial desde content.json; luego la pantalla manda la suya (con las ediciones) en cada estado.
+  fetch('content.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
+    paginas = [{ file: 'index.html', name: 'Inicio' }].concat((d.temas || []).map(function (t, i) {
+      return { file: 'tema.html?t=' + (i + 1), name: t.nombre || 'Tema ' + (i + 1) };
+    }));
+    mostrarEstado();
+  }).catch(function () {});
 
   // ---- Voz ----
   var NUM = { cero: 0, uno: 1, una: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5, seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10 };
@@ -92,7 +99,7 @@
       var nombre = limpiar(paginas[i].name);
       if (nombre.length > 3 && t.indexOf(nombre) !== -1) return { cmd: { action: 'page', file: paginas[i].file }, txt: paginas[i].name };
     }
-    if (tieneAlguna(t, ['inicio', 'portada', 'principio', 'home', 'menu'])) return { cmd: { action: 'page', file: paginas[0].file }, txt: 'Inicio' };
+    if (tieneAlguna(t, ['inicio', 'portada', 'principio', 'home', 'menu'])) return { cmd: { action: 'page', file: 'index.html' }, txt: 'Inicio' };
     if (tieneAlguna(t, ['primera', 'primer', 'empezar', 'comenzar'])) return { cmd: { action: 'slide', index: 0 }, txt: 'Primera' };
     if (tieneAlguna(t, ['ultima', 'ultimo', 'final', 'cierre'])) return { cmd: { action: 'slide', index: 9999 }, txt: 'Ultima' };
     if (tieneAlguna(t, ['siguiente', 'proxima', 'proximo', 'adelante', 'avanza', 'avanzar', 'sigue', 'next'])) return { cmd: { action: 'next' }, txt: 'Siguiente' };
